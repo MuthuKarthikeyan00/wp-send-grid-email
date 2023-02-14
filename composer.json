@@ -1,0 +1,21 @@
+{
+    "name": "root/sen-grid-email",
+    "description": "sengrid",
+    "type": "project",
+    "license": "apache2",
+    "authors": [
+        {
+            "name": "mk"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "sendgrid/sendgrid": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "SendGrid\\": "vendor/sendgrid/sendgrid/lib/",
+            "App\\": "App"
+        }
+    }
+}
