@@ -1,45 +1,27 @@
 <?php
-
-
-
 namespace App;
 
-use \App\Controllers\CallBacksController;
 use \App\Controllers\EnqueueController;
 use \App\Controllers\SendGridMailController;
+use \App\Controllers\AddAdminMenuController;
+
 
 class Router
 {
-    public $enqueue_controller;
-    public $call_backs_controller;
-    public $send_grid_mail_controller;
-    public $to_mail='muthukarthikeyanpmk@gmail.com';
-    public $response;
+    public static $enqueue_controller, $send_grid_mail_controller, $add_admin_menu_controller;
 
-    public function __construct()
-    {
-        $this->register();
-    }
+
     public function register()
-    { 
-        $this->enqueue_controller = new EnqueueController();
-        $this->call_backs_controller = new CallBacksController();
-        $this->send_grid_mail_controller = new SendGridMailController();
+    {
+        self::$enqueue_controller = empty( self::$enqueue_controller) ?  new EnqueueController() : self::$enqueue_controller;
+        self::$send_grid_mail_controller = empty( self::$send_grid_mail_controller) ?  new SendGridMailController() : self::$send_grid_mail_controller;
+        self::$add_admin_menu_controller = empty( self::$add_admin_menu_controller) ?  new AddAdminMenuController() : self::$add_admin_menu_controller;
 
-        add_action('admin_menu',array( $this, 'addAdminMenu'));
+        add_action('admin_menu',array( $this->add_admin_menu_controller, 'addAdminMenu'));
         add_action('admin_enqueue_scripts',array($this->enqueue_controller,'enqueue'));
-        add_action( 'wp_ajax_my_action', array($this,'getPostData'));
+        add_action( 'wp_ajax_my_action', array( $this->send_grid_mail_controller,'getPostData'));
     }
 
-    public function addAdminMenu(){     
-
-            add_menu_page("Register Form","Register Form","manage_options","SendgridEmail",array($this->call_backs_controller,'registerForm'), 'dashicons-store',110);
-    }
-    public function getPostData(){  
-        
-        $this->response = $this->send_grid_mail_controller->send($this->to_mail,$_POST['subject'],$_POST['body']);
-        // echo $this->response;
-    }    
 }
 
 

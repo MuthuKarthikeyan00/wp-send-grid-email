@@ -18,24 +18,25 @@
 
 defined('ABSPATH') or die('not access');
 
-if(!defined('PLUGIN_PATH')){
-    define('PLUGIN_PATH',plugin_dir_path(__FILE__));
-} 
-if(!defined('PLUGIN_URL')){
-    define('PLUGIN_URL',plugin_dir_url(__FILE__));
-} 
-if(!defined('PLUGIN')){
-    define('PLUGIN', plugin_basename(__FILE__));
-} 
+defined('ABSPATH') or die('not access');
 
-if(file_exists(  dirname(__FILE__).'/vendor/autoload.php' )){
-    require_once dirname(__FILE__).'/vendor/autoload.php';
+defined('PLUGIN_PATH') or define('PLUGIN_PATH',plugin_dir_path(__FILE__));
+defined('PLUGIN_URL') or define('PLUGIN_URL',plugin_dir_url(__FILE__));
+defined('PLUGIN') or define('PLUGIN',plugin_basename(__FILE__));
+
+
+if(file_exists( PLUGIN_PATH.'/vendor/autoload.php' )){
+    require_once PLUGIN_PATH.'/vendor/autoload.php';
+}else{
+    die();
 }
 
 if(class_exists('App\\Router')){
-     new App\Router();
+    $router =  new App\Router();
+    $router->register();
+}else{
+    die();
 }
-
 
 
 
